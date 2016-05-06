@@ -92,9 +92,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JoinCar\JoinCar.csproj">
+    <ProjectReference Include="..\JoinCar\JoinCar.Application.csproj">
       <Project>{7DF74A37-62C6-4704-8F62-1D2B2A611F31}</Project>
-      <Name>JoinCar</Name>
+      <Name>JoinCar.Application</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
