@@ -1,4 +1,5 @@
 ﻿using System;
+using JoinCar.Database.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
