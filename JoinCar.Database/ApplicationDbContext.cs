@@ -1,7 +1,8 @@
 ﻿using System.Data.Entity;
+using JoinCar.Database.Entities;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace JoinCar.Database.Entities
+namespace JoinCar.Database
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

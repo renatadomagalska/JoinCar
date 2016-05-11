@@ -5,14 +5,14 @@ namespace JoinCar.Database.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<JoinCar.Database.Entities.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<JoinCar.Database.ApplicationDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(JoinCar.Database.Entities.ApplicationDbContext context)
+        protected override void Seed(JoinCar.Database.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 
