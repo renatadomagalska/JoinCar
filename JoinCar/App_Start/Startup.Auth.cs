@@ -56,15 +56,15 @@ namespace JoinCar
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "1073333016046323",
+               appSecret: "5b9b22ea727a199e1f78b5e2f16660a8");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "785508869795-ahqa7q9vj04s2qu3liruadrio46po827.apps.googleusercontent.com",
+                ClientSecret = "-ODxKBW04LebMSU0t7CNx7zE"
+            });
         }
     }
 }
