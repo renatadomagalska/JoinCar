@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using JoinCar.Database.Entities;
 using JoinCar.Database.Repositories.Interfaces;
 
@@ -28,6 +30,20 @@ namespace JoinCar.Database.Repositories.Repositories
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public ICollection<Opinion> GetUserReceivedOpinions(string userId)
+        {
+            if(string.IsNullOrEmpty(userId))
+                throw new Exception();
+            return _context.Opinions.Where(o => o.Trip.User.Id == userId).ToList();
+        }
+
+        public ICollection<Opinion> GetUserIssuedOpinions(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                throw new Exception();
+            return _context.Opinions.Where(o => o.UserIssuingOpinion.Id == userId).ToList();
         }
     }
 }

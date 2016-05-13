@@ -14,5 +14,7 @@ namespace JoinCar.Database.Repositories.Interfaces
         void EditOpinion(Opinion opinion);
         void DeleteOpinion(int opinionId);
         void Save();
+        ICollection<Opinion> GetUserReceivedOpinions(string userId);
+        ICollection<Opinion> GetUserIssuedOpinions(string userId);
     }
 }
