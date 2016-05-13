@@ -170,6 +170,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\TripsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -233,6 +234,12 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Trips\Create.cshtml" />
+    <Content Include="Views\Trips\Delete.cshtml" />
+    <Content Include="Views\Trips\Details.cshtml" />
+    <Content Include="Views\Trips\Edit.cshtml" />
+    <Content Include="Views\Trips\Index.cshtml" />
+    <Content Include="Views\Trips\ArchivedTripsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -246,6 +253,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\JoinCar.Database.Repositories\JoinCar.Database.Repositories.csproj">
+      <Project>{0a9adcc9-20ac-46fb-a942-565cd72854ac}</Project>
+      <Name>JoinCar.Database.Repositories</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JoinCar.Database\JoinCar.Database.csproj">
       <Project>{8d0b38a7-71e9-48de-89bd-70ab82cc0b09}</Project>
       <Name>JoinCar.Database</Name>

@@ -36,7 +36,24 @@ namespace JoinCar.Database.Repositories.Repositories
 
         public ICollection<Trip> GetAllActiveTrips()
         {
-           return _context.Trips.Where(t => t.DateTime == DateTime.Now).ToList();
+           return _context.Trips.Where(t => t.DateTime >= DateTime.Now).ToList();
+        }
+
+        public ICollection<Trip> GetAllArchivedTrips()
+        {
+            return _context.Trips.Where(t => t.DateTime < DateTime.Now).ToList();
+        }
+
+        public Trip GetTripById(int id)
+        {
+            if (id != null && id != default(int))
+            {
+                return _context.Trips.Find(id);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

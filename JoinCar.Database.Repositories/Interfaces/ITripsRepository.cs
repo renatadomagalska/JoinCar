@@ -14,6 +14,9 @@ namespace JoinCar.Database.Repositories.Interfaces
         void DeleteTrip(int tripId);
         void Save();
         ICollection<Trip> GetAllActiveTrips();
+        ICollection<Trip> GetAllArchivedTrips();
+        Trip GetTripById(int id);
+
 
     }
 }

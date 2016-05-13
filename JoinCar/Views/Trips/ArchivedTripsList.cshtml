@@ -1,0 +1,53 @@
+﻿@model IEnumerable<JoinCar.Database.Entities.Trip>
+
+@{
+    ViewBag.Title = "ArchivedTripsList";
+}
+
+<h2>ArchivedTripsList</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.From)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.To)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AvailableSeats)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.From)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.To)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AvailableSeats)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
