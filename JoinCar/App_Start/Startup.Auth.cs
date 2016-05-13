@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using JoinCar.Database;
 using JoinCar.Database.Entities;
 using Microsoft.AspNet.Identity;
@@ -8,6 +10,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using JoinCar.Models;
+using Microsoft.Owin.Security.Facebook;
 
 namespace JoinCar
 {
@@ -56,15 +59,67 @@ namespace JoinCar
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            app.UseFacebookAuthentication(
-               appId: "1073333016046323",
-               appSecret: "5b9b22ea727a199e1f78b5e2f16660a8");
-
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            var facebookOptions = new FacebookAuthenticationOptions()
             {
-                ClientId = "785508869795-ahqa7q9vj04s2qu3liruadrio46po827.apps.googleusercontent.com",
-                ClientSecret = "-ODxKBW04LebMSU0t7CNx7zE"
-            });
+                AppId = LocalConfiguration.FacebookAppId,
+                AppSecret = LocalConfiguration.FacebookAppSecret,
+                Provider = new FacebookAuthenticationProvider()
+                {
+                    OnAuthenticated = (context) =>
+                    {
+                        context.Identity.AddClaim(new System.Security.Claims.Claim("FacebookAccessToken",
+                            context.AccessToken));
+                        foreach (var claim in context.User)
+                        {
+                            var claimType = string.Format("urn:facebook:{0}", claim.Key);
+                            string claimValue = claim.Value.ToString();
+                            if (!context.Identity.HasClaim(claimType, claimValue))
+                                context.Identity.AddClaim(new System.Security.Claims.Claim(claimType, claimValue,
+                                    "XmlSchemaString", "Facebook"));
+                        }
+
+                        return Task.FromResult(0);
+                    }
+
+                    //OnAuthenticated = async context =>
+                    //{
+                    //    context.Identity.AddClaim(new System.Security.Claims.Claim("FacebookAccessToken",
+                    //        context.AccessToken));
+                    //    foreach (var claim in context.User)
+                    //    {
+                    //        var claimType = string.Format("urn:facebook:{0}", claim.Key);
+                    //        string claimValue = claim.Value.ToString();
+                    //        if (!context.Identity.HasClaim(claimType, claimValue))
+                    //            context.Identity.AddClaim(new System.Security.Claims.Claim(claimType, claimValue,
+                    //                "XmlSchemaString", "Facebook"));
+                    //    }
+                    //}
+                }
+            };
+            app.UseFacebookAuthentication(facebookOptions);
+
+            var googleOptions = new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = LocalConfiguration.GoogleClientId,
+                ClientSecret = LocalConfiguration.GoogleClientSecret,
+                Provider = new GoogleOAuth2AuthenticationProvider()
+                {
+                    OnAuthenticated = (context) =>
+                    {
+                        foreach (var claim in context.User)
+                        {
+                            var claimType = string.Format("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/{0}", claim.Key);
+                            string claimValue = claim.Value.ToString();
+                            context.Identity.AddClaim(new Claim(claimType, claimValue, "http://www.w3.org/2001/XMLSchema#string"));
+                        }
+
+                        return Task.FromResult(0);
+                    }
+                }
+            };
+            app.UseGoogleAuthentication(googleOptions);
+
+
         }
     }
 }

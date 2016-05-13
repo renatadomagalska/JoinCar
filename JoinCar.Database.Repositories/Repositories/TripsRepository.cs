@@ -46,7 +46,7 @@ namespace JoinCar.Database.Repositories.Repositories
 
         public Trip GetTripById(int id)
         {
-            if (id != null && id != default(int))
+            if (id != default(int))
             {
                 return _context.Trips.Find(id);
             }

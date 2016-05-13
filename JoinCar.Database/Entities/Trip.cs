@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,5 +24,6 @@ namespace JoinCar.Database.Entities
         public string Description { get; set; }
 
         public virtual ApplicationUser User { get; set; }
+        public virtual ICollection<Opinion> Opinions { get; set; } 
     }
 }

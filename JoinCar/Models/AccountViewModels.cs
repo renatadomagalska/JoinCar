@@ -6,6 +6,10 @@ namespace JoinCar.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
+        [Display(Name = "Nick")]
+        public string Nick { get; set; }
+
+        [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
@@ -64,6 +68,18 @@ namespace JoinCar.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "Nick")]
+        public string Nick { get; set; }
+
+        [Required]
+        [Display(Name = "First name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last name")]
+        public string LastName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

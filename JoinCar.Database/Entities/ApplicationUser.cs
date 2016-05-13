@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -13,9 +15,9 @@ namespace JoinCar.Database.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public virtual ICollection Trips { get; set; }
-        public virtual ICollection Interests { get; set; }
-        public virtual ICollection Opinions { get; set; }
+        public virtual ICollection<Trip> Trips { get; set; }
+        public virtual ICollection<Interest> Interests { get; set; }
+        public virtual ICollection<Opinion> IssuedOpinions { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

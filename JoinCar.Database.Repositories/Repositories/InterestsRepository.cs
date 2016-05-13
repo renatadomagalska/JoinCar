@@ -14,13 +14,13 @@ namespace JoinCar.Database.Repositories.Repositories
 
         public void AddInterest(Interest interest)
         {
-            _context.Interets.Add(interest);
+            _context.Interests.Add(interest);
         }
 
         public void DeleteInterest(int interestId)
         {
-            var interest = _context.Interets.Find(interestId);
-            _context.Interets.Remove(interest);
+            var interest = _context.Interests.Find(interestId);
+            _context.Interests.Remove(interest);
         }
 
         public void Save()
@@ -30,7 +30,7 @@ namespace JoinCar.Database.Repositories.Repositories
 
         public ICollection<Interest> GetInterestsByUserId(string userId)
         {
-            return _context.Interets.Where(i => i.User.Id == userId).ToList();
+            return _context.Interests.Where(i => i.User.Id == userId).ToList();
         }
     }
 }

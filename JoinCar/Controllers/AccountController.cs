@@ -152,7 +152,7 @@ namespace JoinCar.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {Nick = model.Nick, FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -315,7 +315,8 @@ namespace JoinCar.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToAction("VerifyCode",
+                new {Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe});
         }
 
         //
@@ -368,7 +369,35 @@ namespace JoinCar.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                ApplicationUser user;
+                if (info.Login.LoginProvider == "Facebook")
+                {
+                    var fullName = info.ExternalIdentity.Claims.FirstOrDefault(
+                        c => c.Type == "urn:facebook:name")?.Value.Split(new char[]{' '}, 2);
+                    user = new ApplicationUser
+                    {
+                        Nick = model.Nick,
+                        FirstName = fullName?[0],
+                        LastName = fullName?[1],
+                        UserName = model.Email,
+                        Email = model.Email
+                    };
+                }
+                else
+                {
+                    user = new ApplicationUser
+                    {
+                        Nick = model.Nick,
+                        FirstName =
+                            info.ExternalIdentity.Claims.FirstOrDefault(
+                                c => c.Type == ClaimTypes.GivenName)?.Value,
+                        LastName =
+                            info.ExternalIdentity.Claims.FirstOrDefault(
+                                c => c.Type == ClaimTypes.Surname)?.Value,
+                        UserName = model.Email,
+                        Email = model.Email
+                    };
+                }
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
