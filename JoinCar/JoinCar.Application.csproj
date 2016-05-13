@@ -240,6 +240,7 @@
     <Content Include="Views\Trips\Edit.cshtml" />
     <Content Include="Views\Trips\Index.cshtml" />
     <Content Include="Views\Trips\ArchivedTripsList.cshtml" />
+    <Content Include="Views\Trips\UserTrips.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

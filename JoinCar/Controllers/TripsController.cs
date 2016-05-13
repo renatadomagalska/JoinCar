@@ -142,6 +142,13 @@ namespace JoinCar.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public ActionResult UserTrips()
+        {
+            var objectsList = new List<object>();
+            return View(objectsList);
+        }
+
         //protected override void Dispose(bool disposing)
         //{
         //    if (disposing)
