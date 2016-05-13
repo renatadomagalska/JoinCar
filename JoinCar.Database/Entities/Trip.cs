@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,8 +13,13 @@ namespace JoinCar.Database.Entities
 
         public string From { get; set; }
         public string To { get; set; }
+
+        [DisplayName("Date and time")]
         public DateTime DateTime { get; set; }
+
+        [DisplayName("Available seats")]
         public int AvailableSeats { get; set; }
+
         public string Description { get; set; }
 
         public virtual ApplicationUser User { get; set; }

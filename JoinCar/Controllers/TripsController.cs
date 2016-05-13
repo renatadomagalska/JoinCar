@@ -15,18 +15,37 @@ namespace JoinCar.Controllers
 {
     public class TripsController : Controller
     {
-        private ITripsRepository _tripsRepository = new TripsRepository();
+        private readonly ITripsRepository _tripsRepository = new TripsRepository();
 
         // GET: Trips
-        public ActionResult Index()
+        public ActionResult Index(string searchStringFrom, string searchStringTo, DateTime? searchStartDate, DateTime? searchEndDate)
         {
-            return View(_tripsRepository.GetAllActiveTrips());
+            var trips = _tripsRepository.GetAllActiveTrips();
+            if (!string.IsNullOrEmpty(searchStringFrom))
+                trips = trips.Where(t => t.From.Contains(searchStringFrom)).ToList();
+            if (!string.IsNullOrEmpty(searchStringTo))
+                trips = trips.Where(t => t.To.Contains(searchStringTo)).ToList();
+            if (searchStartDate != null)
+                trips = trips.Where(t => t.DateTime >= searchStartDate.Value).ToList();
+            if (searchEndDate != null)
+                trips = trips.Where(t => t.DateTime >= searchEndDate.Value).ToList();
+
+            return View(trips);
         }
 
         // GET: Trips
-        public ActionResult ArchivedTripsList()
+        public ActionResult ArchivedTripsList(string searchStringFrom, string searchStringTo, DateTime? searchStartDate, DateTime? searchEndDate)
         {
-            return View(_tripsRepository.GetAllArchivedTrips());
+            var trips = _tripsRepository.GetAllArchivedTrips();
+            if (!string.IsNullOrEmpty(searchStringFrom))
+                trips = trips.Where(t => t.From.Contains(searchStringFrom)).ToList();
+            if (!string.IsNullOrEmpty(searchStringTo))
+                trips = trips.Where(t => t.To.Contains(searchStringTo)).ToList();
+            if (searchStartDate != null)
+                trips = trips.Where(t => t.DateTime >= searchStartDate.Value).ToList();
+            if (searchEndDate != null)
+                trips = trips.Where(t => t.DateTime >= searchEndDate.Value).ToList();
+            return View(trips);
         }
 
         // GET: Trips/Details/5
