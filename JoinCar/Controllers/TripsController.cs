@@ -67,6 +67,7 @@ namespace JoinCar.Controllers
         }
 
         // GET: Trips/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -75,6 +76,7 @@ namespace JoinCar.Controllers
         // POST: Trips/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,From,To,DateTime,AvailableSeats,Description")] Trip trip)
@@ -90,6 +92,7 @@ namespace JoinCar.Controllers
         }
 
         // GET: Trips/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -109,6 +112,7 @@ namespace JoinCar.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "Id,From,To,DateTime,AvailableSeats,Description")] Trip trip)
         {
             if (ModelState.IsValid)
@@ -121,6 +125,7 @@ namespace JoinCar.Controllers
         }
 
         // GET: Trips/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -135,7 +140,9 @@ namespace JoinCar.Controllers
             return View(trip);
         }
 
+
         // POST: Trips/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -145,7 +152,7 @@ namespace JoinCar.Controllers
             return RedirectToAction("Index");
         }
 
-
+        [Authorize]
         public ActionResult UserTrips()
         {
             var userId = User.Identity.GetUserId();
@@ -158,6 +165,7 @@ namespace JoinCar.Controllers
             return View(objectsList);
         }
 
+        [Authorize]
         public ActionResult UserInterests()
         {
             return View(_interestsRepository.GetInterestsByUserId(User.Identity.GetUserId()).Select(i => i.Trip));
