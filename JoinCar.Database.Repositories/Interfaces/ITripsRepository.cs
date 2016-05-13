@@ -16,6 +16,7 @@ namespace JoinCar.Database.Repositories.Interfaces
         ICollection<Trip> GetAllActiveTrips();
         ICollection<Trip> GetAllArchivedTrips();
         Trip GetTripById(int id);
+        ICollection<Trip> GetUserTrips(string userId);
 
 
     }

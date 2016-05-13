@@ -47,13 +47,17 @@ namespace JoinCar.Database.Repositories.Repositories
         public Trip GetTripById(int id)
         {
             if (id != default(int))
-            {
                 return _context.Trips.Find(id);
-            }
             else
-            {
-                throw new NotImplementedException();
-            }
+                throw new Exception();
+                //todo throw custom exception
         }
+
+        public ICollection<Trip> GetUserTrips(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                throw new Exception();
+            return _context.Trips.Where(t => t.User.Id == userId).ToList();
+        } 
     }
 }

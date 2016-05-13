@@ -10,12 +10,15 @@ using JoinCar.Database;
 using JoinCar.Database.Entities;
 using JoinCar.Database.Repositories.Interfaces;
 using JoinCar.Database.Repositories.Repositories;
+using Microsoft.AspNet.Identity;
 
 namespace JoinCar.Controllers
 {
     public class TripsController : Controller
     {
         private readonly ITripsRepository _tripsRepository = new TripsRepository();
+        private readonly IOpinionsRepository _opinionsRepository = new OpinionsRepository();
+        private readonly IInterestsRepository _interestsRepository = new InterestsRepository();
 
         // GET: Trips
         public ActionResult Index(string searchStringFrom, string searchStringTo, DateTime? searchStartDate, DateTime? searchEndDate)
@@ -145,8 +148,19 @@ namespace JoinCar.Controllers
 
         public ActionResult UserTrips()
         {
-            var objectsList = new List<object>();
+            var userId = User.Identity.GetUserId();
+            var objectsList = new List<object>
+            {
+                _tripsRepository.GetUserTrips(userId),
+                _opinionsRepository.GetUserReceivedOpinions(userId),
+                _opinionsRepository.GetUserIssuedOpinions(userId)
+            };
             return View(objectsList);
+        }
+
+        public ActionResult UserInterests()
+        {
+            return View(_interestsRepository.GetInterestsByUserId(User.Identity.GetUserId()).Select(i => i.Trip));
         }
 
     }

@@ -1,8 +1,14 @@
-﻿@model IEnumerable<object>
-
+﻿@using JoinCar.Database.Entities
+@model IEnumerable<object>
+@{
+    List<Trip> userTripsList = Model.ToList()[0] as List<Trip>;
+    List<Opinion> userReceivedOpinions = Model.ToList()[1] as List<Opinion>;
+    List<Opinion> userIssuedOpinions = Model.ToList()[2] as List<Opinion>;
+}
 @{
     ViewBag.Title = "UserTravels";
 }
 
-<h2>UserTravels</h2>
+<h2>User trips</h2>
+
 
