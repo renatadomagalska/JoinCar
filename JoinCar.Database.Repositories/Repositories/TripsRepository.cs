@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using JoinCar.Database.Entities;
@@ -11,7 +12,7 @@ namespace JoinCar.Database.Repositories.Repositories
 {
     public class TripsRepository : ITripsRepository
     {
-        readonly ApplicationDbContext _context = new ApplicationDbContext();
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
 
         public void AddTrip(Trip trip)
         {
@@ -36,7 +37,7 @@ namespace JoinCar.Database.Repositories.Repositories
 
         public ICollection<Trip> GetAllActiveTrips()
         {
-           return _context.Trips.Where(t => t.DateTime >= DateTime.Now).ToList();
+           return _context.Trips.Include("User").Where(t => t.DateTime >= DateTime.Now).ToList();
         }
 
         public ICollection<Trip> GetAllArchivedTrips()
@@ -58,6 +59,36 @@ namespace JoinCar.Database.Repositories.Repositories
             if (string.IsNullOrEmpty(userId))
                 throw new Exception();
             return _context.Trips.Where(t => t.User.Id == userId).ToList();
-        } 
+        }
+
+        public ICollection<Trip> GetActiveFilteredTrips(string searchStringFrom, string searchStringTo, DateTime? searchStartDate,
+            DateTime? searchEndDate)
+        {
+            var trips = GetAllActiveTrips();
+            if (!string.IsNullOrEmpty(searchStringFrom))
+                trips = trips.Where(t => t.From.Contains(searchStringFrom)).ToList();
+            if (!string.IsNullOrEmpty(searchStringTo))
+                trips = trips.Where(t => t.To.Contains(searchStringTo)).ToList();
+            if (searchStartDate != null)
+                trips = trips.Where(t => t.DateTime >= searchStartDate.Value).ToList();
+            if (searchEndDate != null)
+                trips = trips.Where(t => t.DateTime >= searchEndDate.Value).ToList();
+            return trips;
+        }
+
+        public ICollection<Trip> GetArchivedFilteredTrips(string searchStringFrom, string searchStringTo, DateTime? searchStartDate,
+            DateTime? searchEndDate)
+        {
+            var trips = GetAllArchivedTrips();
+            if (!string.IsNullOrEmpty(searchStringFrom))
+                trips = trips.Where(t => t.From.Contains(searchStringFrom)).ToList();
+            if (!string.IsNullOrEmpty(searchStringTo))
+                trips = trips.Where(t => t.To.Contains(searchStringTo)).ToList();
+            if (searchStartDate != null)
+                trips = trips.Where(t => t.DateTime >= searchStartDate.Value).ToList();
+            if (searchEndDate != null)
+                trips = trips.Where(t => t.DateTime >= searchEndDate.Value).ToList();
+            return trips;
+        }
     }
 }

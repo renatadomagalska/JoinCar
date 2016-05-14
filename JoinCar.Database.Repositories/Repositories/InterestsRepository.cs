@@ -10,7 +10,7 @@ namespace JoinCar.Database.Repositories.Repositories
 {
     public class InterestsRepository : IInterestsRepository
     {
-        readonly ApplicationDbContext _context = new ApplicationDbContext();
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
 
         public void AddInterest(Interest interest)
         {

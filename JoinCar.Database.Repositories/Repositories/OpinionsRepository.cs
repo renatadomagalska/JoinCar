@@ -9,7 +9,7 @@ namespace JoinCar.Database.Repositories.Repositories
 {
     public class OpinionsRepository : IOpinionsRepository
     {
-        readonly ApplicationDbContext _context = new ApplicationDbContext();
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
 
         public void AddOpinion(Opinion opinion)
         {

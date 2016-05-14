@@ -19,36 +19,24 @@ namespace JoinCar.Controllers
         private readonly ITripsRepository _tripsRepository = new TripsRepository();
         private readonly IOpinionsRepository _opinionsRepository = new OpinionsRepository();
         private readonly IInterestsRepository _interestsRepository = new InterestsRepository();
+        private readonly IApplicationUsersRepository _applicationUsersRepository = new ApplicationUsersRepository();
 
         // GET: Trips
-        public ActionResult Index(string searchStringFrom, string searchStringTo, DateTime? searchStartDate, DateTime? searchEndDate)
+        public ActionResult Index(string searchStringFrom, string searchStringTo, DateTime? searchStartDate,
+            DateTime? searchEndDate)
         {
-            var trips = _tripsRepository.GetAllActiveTrips();
-            if (!string.IsNullOrEmpty(searchStringFrom))
-                trips = trips.Where(t => t.From.Contains(searchStringFrom)).ToList();
-            if (!string.IsNullOrEmpty(searchStringTo))
-                trips = trips.Where(t => t.To.Contains(searchStringTo)).ToList();
-            if (searchStartDate != null)
-                trips = trips.Where(t => t.DateTime >= searchStartDate.Value).ToList();
-            if (searchEndDate != null)
-                trips = trips.Where(t => t.DateTime >= searchEndDate.Value).ToList();
-
-            return View(trips);
+            return
+                View(_tripsRepository.GetActiveFilteredTrips(searchStringFrom, searchStringTo, searchStartDate,
+                    searchEndDate));
         }
 
         // GET: Trips
-        public ActionResult ArchivedTripsList(string searchStringFrom, string searchStringTo, DateTime? searchStartDate, DateTime? searchEndDate)
+        public ActionResult ArchivedTripsList(string searchStringFrom, string searchStringTo, DateTime? searchStartDate,
+            DateTime? searchEndDate)
         {
-            var trips = _tripsRepository.GetAllArchivedTrips();
-            if (!string.IsNullOrEmpty(searchStringFrom))
-                trips = trips.Where(t => t.From.Contains(searchStringFrom)).ToList();
-            if (!string.IsNullOrEmpty(searchStringTo))
-                trips = trips.Where(t => t.To.Contains(searchStringTo)).ToList();
-            if (searchStartDate != null)
-                trips = trips.Where(t => t.DateTime >= searchStartDate.Value).ToList();
-            if (searchEndDate != null)
-                trips = trips.Where(t => t.DateTime >= searchEndDate.Value).ToList();
-            return View(trips);
+            return
+                View(_tripsRepository.GetArchivedFilteredTrips(searchStringFrom, searchStringTo, searchStartDate,
+                    searchEndDate));
         }
 
         // GET: Trips/Details/5
@@ -83,6 +71,7 @@ namespace JoinCar.Controllers
         {
             if (ModelState.IsValid)
             {
+                trip.UserId = User.Identity.GetUserId();
                 _tripsRepository.AddTrip(trip);
                 _tripsRepository.Save();
                 return RedirectToAction("Index");
