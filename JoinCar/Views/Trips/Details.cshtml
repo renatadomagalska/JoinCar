@@ -4,11 +4,24 @@
     ViewBag.Title = "Details";
 }
 
+<div id="fb-root"></div>
+<script>
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.6&appId=1073333016046323";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
 <h2>Details</h2>
 
 <div>
     <h4>Trip</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.From)
@@ -52,7 +65,12 @@
 
     </dl>
 </div>
+<div class="fb-like" data-href="http://localhost:55042/Trips/Details/id=(.*)" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br/>
+<div class="fb-comments" data-href="http://localhost:55042/Trips/Details/id=(.*)" data-width="600" data-numposts="5"></div>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+
