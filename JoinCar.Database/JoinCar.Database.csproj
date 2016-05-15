@@ -66,6 +66,14 @@
     <Compile Include="Migrations\201605131947218_AppDB2.Designer.cs">
       <DependentUpon>201605131947218_AppDB2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605141922183_AppDB3.cs" />
+    <Compile Include="Migrations\201605141922183_AppDB3.Designer.cs">
+      <DependentUpon>201605141922183_AppDB3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605151840453_AppDB4.cs" />
+    <Compile Include="Migrations\201605151840453_AppDB4.Designer.cs">
+      <DependentUpon>201605151840453_AppDB4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -79,6 +87,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201605131947218_AppDB2.resx">
       <DependentUpon>201605131947218_AppDB2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605141922183_AppDB3.resx">
+      <DependentUpon>201605141922183_AppDB3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605151840453_AppDB4.resx">
+      <DependentUpon>201605151840453_AppDB4.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

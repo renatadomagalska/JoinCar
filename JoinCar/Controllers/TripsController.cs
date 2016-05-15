@@ -19,36 +19,24 @@ namespace JoinCar.Controllers
         private readonly ITripsRepository _tripsRepository = new TripsRepository();
         private readonly IOpinionsRepository _opinionsRepository = new OpinionsRepository();
         private readonly IInterestsRepository _interestsRepository = new InterestsRepository();
+        private readonly IApplicationUsersRepository _applicationUsersRepository = new ApplicationUsersRepository();
 
         // GET: Trips
-        public ActionResult Index(string searchStringFrom, string searchStringTo, DateTime? searchStartDate, DateTime? searchEndDate)
+        public ActionResult Index(string searchStringFrom, string searchStringTo, DateTime? searchStartDate,
+            DateTime? searchEndDate)
         {
-            var trips = _tripsRepository.GetAllActiveTrips();
-            if (!string.IsNullOrEmpty(searchStringFrom))
-                trips = trips.Where(t => t.From.Contains(searchStringFrom)).ToList();
-            if (!string.IsNullOrEmpty(searchStringTo))
-                trips = trips.Where(t => t.To.Contains(searchStringTo)).ToList();
-            if (searchStartDate != null)
-                trips = trips.Where(t => t.DateTime >= searchStartDate.Value).ToList();
-            if (searchEndDate != null)
-                trips = trips.Where(t => t.DateTime >= searchEndDate.Value).ToList();
-
-            return View(trips);
+            return
+                View(_tripsRepository.GetActiveFilteredTrips(searchStringFrom, searchStringTo, searchStartDate,
+                    searchEndDate));
         }
 
         // GET: Trips
-        public ActionResult ArchivedTripsList(string searchStringFrom, string searchStringTo, DateTime? searchStartDate, DateTime? searchEndDate)
+        public ActionResult ArchivedTripsList(string searchStringFrom, string searchStringTo, DateTime? searchStartDate,
+            DateTime? searchEndDate)
         {
-            var trips = _tripsRepository.GetAllArchivedTrips();
-            if (!string.IsNullOrEmpty(searchStringFrom))
-                trips = trips.Where(t => t.From.Contains(searchStringFrom)).ToList();
-            if (!string.IsNullOrEmpty(searchStringTo))
-                trips = trips.Where(t => t.To.Contains(searchStringTo)).ToList();
-            if (searchStartDate != null)
-                trips = trips.Where(t => t.DateTime >= searchStartDate.Value).ToList();
-            if (searchEndDate != null)
-                trips = trips.Where(t => t.DateTime >= searchEndDate.Value).ToList();
-            return View(trips);
+            return
+                View(_tripsRepository.GetArchivedFilteredTrips(searchStringFrom, searchStringTo, searchStartDate,
+                    searchEndDate));
         }
 
         // GET: Trips/Details/5
@@ -67,6 +55,7 @@ namespace JoinCar.Controllers
         }
 
         // GET: Trips/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -75,12 +64,14 @@ namespace JoinCar.Controllers
         // POST: Trips/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,From,To,DateTime,AvailableSeats,Description")] Trip trip)
         {
             if (ModelState.IsValid)
             {
+                trip.UserId = User.Identity.GetUserId();
                 _tripsRepository.AddTrip(trip);
                 _tripsRepository.Save();
                 return RedirectToAction("Index");
@@ -90,6 +81,7 @@ namespace JoinCar.Controllers
         }
 
         // GET: Trips/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -109,6 +101,7 @@ namespace JoinCar.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "Id,From,To,DateTime,AvailableSeats,Description")] Trip trip)
         {
             if (ModelState.IsValid)
@@ -121,6 +114,7 @@ namespace JoinCar.Controllers
         }
 
         // GET: Trips/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -135,7 +129,9 @@ namespace JoinCar.Controllers
             return View(trip);
         }
 
+
         // POST: Trips/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -145,7 +141,7 @@ namespace JoinCar.Controllers
             return RedirectToAction("Index");
         }
 
-
+        [Authorize]
         public ActionResult UserTrips()
         {
             var userId = User.Identity.GetUserId();
@@ -158,6 +154,7 @@ namespace JoinCar.Controllers
             return View(objectsList);
         }
 
+        [Authorize]
         public ActionResult UserInterests()
         {
             return View(_interestsRepository.GetInterestsByUserId(User.Identity.GetUserId()).Select(i => i.Trip));

@@ -18,6 +18,11 @@ namespace JoinCar.Database.Repositories.Interfaces
         Trip GetTripById(int id);
         ICollection<Trip> GetUserTrips(string userId);
 
+        ICollection<Trip> GetActiveFilteredTrips(string searchStringFrom, string searchStringTo,
+            DateTime? searchStartDate, DateTime? searchEndDate);
+
+        ICollection<Trip> GetArchivedFilteredTrips(string searchStringFrom, string searchStringTo,
+            DateTime? searchStartDate, DateTime? searchEndDate);
 
     }
 }
