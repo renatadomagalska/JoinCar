@@ -7,7 +7,7 @@ namespace JoinCar.Database.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.Trips", "JsonDirections", c => c.String(storeType: "ntext"));
+            AddColumn("dbo.Trips", "JsonDirections", c => c.String());
         }
         
         public override void Down()
