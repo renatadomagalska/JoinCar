@@ -160,5 +160,40 @@ namespace JoinCar.Controllers
             return View(_interestsRepository.GetInterestsByUserId(User.Identity.GetUserId()).Select(i => i.Trip));
         }
 
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserInterests(int tripId)
+        {
+            var interest = new Interest(){
+                TripId = tripId,
+                UserId = User.Identity.GetUserId()
+            };
+            _interestsRepository.AddInterest(interest);
+            _interestsRepository.Save();
+
+            return RedirectToAction("UserInterests");
+        }
+
+        [Authorize]
+        public ActionResult CreateOpinion(int tripId)
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateOpinion([Bind(Include = "Id,Description,TripId")] Opinion opinion)
+        {
+            if (ModelState.IsValid)
+            {
+                opinion.UserIssuingOpinionId = User.Identity.GetUserId();
+                _opinionsRepository.AddOpinion(opinion);
+                _opinionsRepository.Save();
+            }
+            var trip = _tripsRepository.GetTripById(opinion.TripId);
+            return View("Details", trip);
+        }
     }
 }

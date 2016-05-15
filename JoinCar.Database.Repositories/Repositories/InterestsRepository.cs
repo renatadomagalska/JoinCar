@@ -30,7 +30,7 @@ namespace JoinCar.Database.Repositories.Repositories
 
         public ICollection<Interest> GetInterestsByUserId(string userId)
         {
-            return _context.Interests.Where(i => i.User.Id == userId).ToList();
+            return _context.Interests.Where(i => i.UserId == userId).ToList();
         }
     }
 }

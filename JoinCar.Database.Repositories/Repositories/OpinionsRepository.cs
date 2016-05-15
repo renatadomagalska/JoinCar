@@ -34,16 +34,19 @@ namespace JoinCar.Database.Repositories.Repositories
 
         public ICollection<Opinion> GetUserReceivedOpinions(string userId)
         {
-            if(string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(userId))
                 throw new Exception();
-            return _context.Opinions.Where(o => o.Trip.User.Id == userId).ToList();
+            return (from o in _context.Opinions
+                join tr in _context.Trips on o.TripId equals tr.Id
+                where tr.UserId == userId
+                select o).ToList();
         }
 
         public ICollection<Opinion> GetUserIssuedOpinions(string userId)
         {
             if (string.IsNullOrEmpty(userId))
                 throw new Exception();
-            return _context.Opinions.Where(o => o.UserIssuingOpinion.Id == userId).ToList();
+            return _context.Opinions.Where(o => o.UserIssuingOpinionId == userId).ToList();
         }
     }
 }

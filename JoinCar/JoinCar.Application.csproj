@@ -243,6 +243,7 @@
     <Content Include="Views\Trips\ArchivedTripsList.cshtml" />
     <Content Include="Views\Trips\UserTrips.cshtml" />
     <Content Include="Views\Trips\UserInterests.cshtml" />
+    <Content Include="Views\Trips\CreateOpinion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

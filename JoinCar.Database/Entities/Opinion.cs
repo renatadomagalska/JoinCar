@@ -16,6 +16,8 @@ namespace JoinCar.Database.Entities
         public int Id { get; set; }
 
         public string Description { get; set; }
+        public string UserIssuingOpinionId { get; set; }
+        public int TripId { get; set; }
 
         public virtual ApplicationUser UserIssuingOpinion { get; set; }
         public virtual Trip Trip{ get; set; }

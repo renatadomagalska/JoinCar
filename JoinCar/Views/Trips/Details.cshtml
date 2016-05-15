@@ -1,4 +1,5 @@
-﻿@model JoinCar.Database.Entities.Trip
+﻿@using Microsoft.AspNet.Identity
+@model JoinCar.Database.Entities.Trip
 
 @{
     ViewBag.Title = "Details";
@@ -15,7 +16,8 @@
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 </script>
-
+<script type="text/javascript" language="javascript">jQuery('FC').attr('data-href', window.location.href.split('?')[0]);</script>
+<script type="text/javascript" language="javascript">jQuery('FL').attr('data-href', window.location.href.split('?')[0]);</script>
 <script src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDO1JcTRY5TngKBh8MvyuWdC4v1_zzizQ4"></script>
 <script>
 
@@ -26,13 +28,14 @@
     var end_geocoded;
     var directionsService;
     var directionsDisplay;
+
     function initialize() {
         directionsService = new google.maps.DirectionsService;
         directionsDisplay = new google.maps.DirectionsRenderer;
         var mapProp = {
             center: { lat: -34.397, lng: 150.644 },
-            zoom:5,
-            mapTypeId:google.maps.MapTypeId.ROADMAP
+            zoom: 5,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 //        google.maps.event.addListener(map, 'click', function (event) {
@@ -136,22 +139,48 @@
         <dd>
             @Html.DisplayFor(model => model.AvailableSeats)
         </dd>
-         <dt>
+        <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        
+
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
 
         @Html.HiddenFor(model => model.Description)
-
     </dl>
-</div>
-<div class="fb-like" data-href="http://localhost:55042/Trips/Details/id=(.*)" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br/>
-<div class="fb-comments" data-href="http://localhost:55042/Trips/Details/id=(.*)" data-width="600" data-numposts="5"></div>
 
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+    <h2>
+        @{
+
+            if (User.Identity.GetUserId() != Model.UserId)
+            {
+               // @Html.ActionLink("Join car", "UserInterests", new { tripId = Model.Id })
+                if (Model.DateTime < DateTime.Now)
+                {
+                    @Html.ActionLink("Write opinion", "CreateOpinion", new { tripId = Model.Id })
+                }
+            }
+        }
+    </h2>
+</div>
+<div id="FL" class="fb-like" data-href="" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br/>
+<div id="FC" class="fb-comments" data-href="" data-width="600" data-numposts="5"></div>
+
+
+@{
+    if (User.Identity.GetUserId() == Model.UserId)
+    {
+        <p>
+            @Html.ActionLink("Edit", "Edit", new {id = Model.Id}) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    }
+    else
+    {
+        <p>
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    }
+}
+            
