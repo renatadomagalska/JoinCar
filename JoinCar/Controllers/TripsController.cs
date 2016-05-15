@@ -67,7 +67,7 @@ namespace JoinCar.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,From,To,DateTime,AvailableSeats,Description")] Trip trip)
+        public ActionResult Create([Bind(Include = "Id,From,To,DateTime,AvailableSeats,Description,JsonDirections")] Trip trip)
         {
             if (ModelState.IsValid)
             {
@@ -102,7 +102,7 @@ namespace JoinCar.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include = "Id,From,To,DateTime,AvailableSeats,Description")] Trip trip)
+        public ActionResult Edit([Bind(Include = "Id,From,To,DateTime,AvailableSeats,Description,JsonDirections")] Trip trip)
         {
             if (ModelState.IsValid)
             {

@@ -24,8 +24,6 @@ namespace JoinCar.Database.Entities
         public string Description { get; set; }
         public string UserId { get; set; }
 
-        [Column(TypeName = "ntext")]
-        [MaxLength]
         public string JsonDirections { get; set; }
 
         public virtual ApplicationUser User { get; set; }
