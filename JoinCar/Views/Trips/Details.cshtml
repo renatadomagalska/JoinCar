@@ -49,83 +49,11 @@
                     else
                         end_geocoded = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
 
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-
-            });
-        }
-        function placeMarker(location) {
-            var marker = new google.maps.Marker({
-                position: location,
-                map: map,
-            });
-            var infowindow = new google.maps.InfoWindow({
-                content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
-            });
-            infowindow.open(map, marker);
-            wayps.push({
-                location: location,
-                stopover: true
-            });
-        }
-        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-            // var xmlValue = document.getElementById("Description").value)
-            var xmlValue = '<note><origin>' + new google.maps.LatLng(50.736, 16.655)
-                   + '</origin><destination>' + new google.maps.LatLng(-32.397, 147.644)
-                   + '</destination><waypoints>' + [{ location: new google.maps.LatLng(-32.397, 147.644) }]
-                   + '</waypoints></note>';
-            parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(xmlValue, "text/xml");
-            var origin = xmlDoc.getElementsByTagName("origin")[0].childNodes[0].nodeValue.toString();
-            var destination = xmlDoc.getElementsByTagName("destination")[0].childNodes[0].nodeValue.toString();
-            var waypoints = xmlDoc.getElementsByTagName("waypoints")[0] ;
-            directionsService.route({
-//                destination: xmlDoc.getElementsByTagName("destination"),
-                //                waypoints: xmlDoc.getElementsByTagName("waypoints"),
-                origin: getMatches(origin),
-                destination: getMatches(destination),
-                waypoints: [{ location: new google.maps.LatLng(51.736, 14.655) }],
-                optimizeWaypoints: true,
-                travelMode: google.maps.TravelMode.DRIVING
-            }, function (response, status) {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    directionsDisplay.setDirections(response);
-                } else {
-                    window.alert('Directions request failed due to ' + status);
-                }
-            });
-        }
-        function getMatches(string) {// default to the first capturing group
-            var matches = [];
-            var match;
-            var regex = /\( *(-?\d*.\d*), *(-?\d*.\d*) *\)/g;
-            while (match = regex.exec(string)) {
-                matches.push(match[1]);
-                matches.push(match[2]);
-            }
-            point = new google.maps.LatLng(matches[0], matches[1]);
-            return point;
-        }
-        google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-</head>
-
-<body>
-<div id="googleMap" style="width:500px;height:380px;"></div>
-    <div id="right-panel">
-    <div>
-    <br>
-      <input type="submit" id="submit">
-    </div>
-    <div id="directions-panel"></div>
-    </div>
-
 <h2>Details</h2>
 
 <div>
     <h4>Trip</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.From)
@@ -170,10 +98,10 @@
 
     </dl>
 </div>
+<div class="fb-like" data-href="http://localhost:55042/Trips/Details/id=(.*)" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br/>
+<div class="fb-comments" data-href="http://localhost:55042/Trips/Details/id=(.*)" data-width="600" data-numposts="5"></div>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
-</body>
-
-</html>
