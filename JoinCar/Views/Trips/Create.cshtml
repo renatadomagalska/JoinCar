@@ -10,57 +10,62 @@
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Trip</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <hr/>
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
         <div class="form-group">
-            @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.From, htmlAttributes: new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.From, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.From, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.From, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.From, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.To, htmlAttributes: new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.To, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.To, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.To, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.To, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.DateTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.DateTime, htmlAttributes: new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.DateTime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DateTime, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.DateTime, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.DateTime, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.AvailableSeats, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.AvailableSeats, htmlAttributes: new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.AvailableSeats, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.AvailableSeats, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.AvailableSeats, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.AvailableSeats, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Description, htmlAttributes: new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Description, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.Description, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="button" id="submit_road" value ="Create Map"  onclick="createRoad()" >
+                <input type="submit" value="Create" class="btn btn-default"/>
             </div>
         </div>
+        <div id="googleMap" style="width: 500px; height: 380px; visibility: hidden;"></div>
+        <!--Html.HiddenFor(model => model.JsonDirections, "");-->
     </div>
+
+    
 }
 
 <div>
@@ -70,3 +75,88 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDO1JcTRY5TngKBh8MvyuWdC4v1_zzizQ4"></script>
+<script>
+
+    var map;
+    var wayps = [];
+    var geocoder;
+    var start_geocoded;
+    var end_geocoded;
+    var directionsService;
+    var directionsDisplay;
+    function initialize() {
+        directionsService = new google.maps.DirectionsService;
+        directionsDisplay = new google.maps.DirectionsRenderer;
+        var mapProp = {
+            zoom:5,
+            mapTypeId:google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        google.maps.event.addListener(map, 'click', function (event) {
+            placeMarker(event.latLng);
+        });
+    }
+
+    function change() {
+        document.getElementById('googleMap').style.visibility = 'visible';
+        var elem = document.getElementById("submit_road");
+        if (elem.value == "Create Map") elem.value = "Create Road";
+    }
+    function createRoad() {
+        change();
+        directionsDisplay.setMap(map);
+        document.getElementById('submit_road').addEventListener('click', function () {
+            calculateAndDisplayRoute(directionsService, directionsDisplay);
+        });
+        var geocoder = new google.maps.Geocoder();
+        geocodeAddress(geocoder, document.getElementById("From").value, "start");
+        geocodeAddress(geocoder, document.getElementById("To").value, "end");
+    }
+    function geocodeAddress(geocoder, address, type) {
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+                if(type.localeCompare("start"))
+                    start_geocoded = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+                else
+                    end_geocoded = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+
+        });
+    }
+    function placeMarker(location) {
+        new google.maps.Marker({position: location, map: map, });
+        wayps.push({location: location,stopover: true});
+    }
+    function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+        directionsService.route({
+            origin: start_geocoded,
+            destination: end_geocoded,
+            waypoints: wayps,
+            optimizeWaypoints: true,
+            travelMode: google.maps.TravelMode.DRIVING
+        }, function (response, status) {
+            if (status === google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                var JsonValue = { "origin": JSON.stringify(start_geocoded), "destination": JSON.stringify(end_geocoded), "waypoints": JSON.stringify(wayps) }
+                alert (JSON.stringify(JsonValue))
+                //$('#XmlDirections').val(xmlValue);
+            } else {
+                window.alert('Directions request failed due to ' + status);
+            }
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+
+
