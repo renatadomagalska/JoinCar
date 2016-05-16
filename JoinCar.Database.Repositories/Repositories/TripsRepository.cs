@@ -37,7 +37,7 @@ namespace JoinCar.Database.Repositories.Repositories
 
         public ICollection<Trip> GetAllActiveTrips()
         {
-           return _context.Trips.Include("User").Where(t => t.DateTime >= DateTime.Now).ToList();
+            return _context.Trips.Include("User").Where(t => t.DateTime >= DateTime.Now).ToList();
         }
 
         public ICollection<Trip> GetAllArchivedTrips()
@@ -51,7 +51,7 @@ namespace JoinCar.Database.Repositories.Repositories
                 return _context.Trips.Find(id);
             else
                 throw new Exception();
-                //todo throw custom exception
+            //todo throw custom exception
         }
 
         public ICollection<Trip> GetUserTrips(string userId)
@@ -97,6 +97,20 @@ namespace JoinCar.Database.Repositories.Repositories
                     join intr in _context.Interests on u.Id equals intr.UserId
                     where intr.TripId == id
                     select u).ToList();
+        }
+
+        public void IncrementAvailableSeats(int id)
+        {
+            var trip = _context.Trips.Find(id);
+            trip.AvailableSeats += 1;
+            EditTrip(trip);
+        }
+
+        public void DecrementAvailableSeats(int id)
+        {
+            var trip = _context.Trips.Find(id);
+            trip.AvailableSeats -= 1;
+            EditTrip(trip);
         }
     }
 }

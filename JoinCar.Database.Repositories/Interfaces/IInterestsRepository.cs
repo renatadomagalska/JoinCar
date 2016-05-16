@@ -13,5 +13,7 @@ namespace JoinCar.Database.Repositories.Interfaces
         void DeleteInterest(int interestId);
         void Save();
         ICollection<Interest> GetInterestsByUserId(string userId);
+        Interest GetIntrestById(int id);
+        Interest GetInterestByTripAndUserIds(int tripId, string userId);
     }
 }

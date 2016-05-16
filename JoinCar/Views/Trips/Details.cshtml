@@ -110,24 +110,32 @@
 
 <div>
     <h4>Trip</h4>
-    <hr/>
+    <hr />
     <div id="googleMap" style="width: 500px; height: 380px;"></div>
     @Html.Partial("_TripDetails", trip)
 
-    <h2>
-        @{
-
-            if (User.Identity.GetUserId() != trip?.UserId)
+    @{
+        if (User.Identity.GetUserId() == trip?.UserId)
+        {
+            if (trip?.AvailableSeats > 0)
             {
-                // @Html.ActionLink("Join car", "UserInterests", new { tripId = Model.Id })
-                if (trip?.DateTime < DateTime.Now)
+                using (Html.BeginForm())
                 {
-                    <br/>
-                    @Html.ActionLink("Write opinion", "CreateOpinion", new {tripId = trip.Id})
+                    @Html.AntiForgeryToken()
+                    <div>
+                        @Html.HiddenFor(model => trip.Id)
+                        <h2><input type="submit" value="JoinCar" class="btn btn-default" /></h2>
+                    </div>
                 }
             }
+
+            if (trip?.DateTime < DateTime.Now)
+            {
+                <br />
+                <h2>Html.ActionLink("Write opinion", "CreateOpinion", new { tripId = trip.Id })</h2>
+            }
         }
-    </h2>
+    }
 </div>
 
 @Html.Partial("_PassengersList", passengers)

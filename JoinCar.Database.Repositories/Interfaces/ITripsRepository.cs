@@ -26,5 +26,7 @@ namespace JoinCar.Database.Repositories.Interfaces
             DateTime? searchStartDate, DateTime? searchEndDate);
 
         ICollection<ApplicationUser> GetTripPassengers(int id);
+        void IncrementAvailableSeats(int id);
+        void DecrementAvailableSeats(int id);
     }
 }

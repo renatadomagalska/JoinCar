@@ -1,7 +1,7 @@
 ﻿@using JoinCar.Controllers
 @using Microsoft.AspNet.Identity
 @model IEnumerable<JoinCar.Database.Entities.Trip>
-    
+
 <table class="table">
     <tr>
         <th>
@@ -47,29 +47,33 @@
                         @Html.ActionLink("Details", "Details", new { id = item.Id })
                     </td>
                 }
-                else if (@HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString() == "UserInterests")
+                else if (@HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString() == "MyInterests")
                 {
-                    
+                    using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ActionLink("Leave car", "MyInterests", new { tripId = item.Id })
+                    }
                 }
                 else
                 {
                     if (User.Identity.GetUserId() == item.User.Id)
                     {
                         <td>
-                            @Html.ActionLink("Details", "Details", new {id = item.Id}) |
-                            @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
-                            @Html.ActionLink("Delete", "Delete", new {id = item.Id})
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                         </td>
                     }
                     else
                     {
                         <td>
-                            @Html.ActionLink("Details", "Details", new {id = item.Id})
+                            @Html.ActionLink("Details", "Details", new { id = item.Id })
                         </td>
                     }
                 }
             }
         </tr>
-    }
+                }
 
 </table>

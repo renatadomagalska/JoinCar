@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using JoinCar.Database;
@@ -169,12 +170,44 @@ namespace JoinCar.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MyInterests(int tripId)
         {
-            var interest = new Interest(){
-                TripId = tripId,
-                UserId = User.Identity.GetUserId()
-            };
-            _interestsRepository.AddInterest(interest);
-            _interestsRepository.Save();
+            using (var scope = new TransactionScope())
+            {
+                var interest = _interestsRepository.GetInterestByTripAndUserIds(tripId, User.Identity.GetUserId());
+                if (interest == null)
+                {
+                    return HttpNotFound();
+                }
+                _interestsRepository.DeleteInterest(interest.Id);
+                _interestsRepository.Save();
+                _tripsRepository.IncrementAvailableSeats(tripId);
+                _tripsRepository.Save();
+
+                scope.Complete();
+            }
+
+            return RedirectToAction("MyInterests");
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Details(int id)
+        {
+            using (var scope = new TransactionScope())
+            {
+                var interest = new Interest()
+                {
+                    TripId = id,
+                    UserId = User.Identity.GetUserId()
+                };
+                _interestsRepository.AddInterest(interest);
+                _interestsRepository.Save();
+
+                _tripsRepository.DecrementAvailableSeats(id);
+                _tripsRepository.Save();
+
+                scope.Complete();
+            }
 
             return RedirectToAction("MyInterests");
         }

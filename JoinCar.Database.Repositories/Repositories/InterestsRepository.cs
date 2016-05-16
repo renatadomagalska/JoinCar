@@ -32,5 +32,15 @@ namespace JoinCar.Database.Repositories.Repositories
         {
             return _context.Interests.Where(i => i.UserId == userId).ToList();
         }
+
+        public Interest GetIntrestById(int id)
+        {
+            return _context.Interests.Find(id);
+        }
+
+        public Interest GetInterestByTripAndUserIds(int tripId, string userId)
+        {
+            return _context.Interests.FirstOrDefault(i => i.TripId == tripId && i.UserId == userId);
+        }
     }
 }
