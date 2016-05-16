@@ -20,6 +20,5 @@ namespace JoinCar.Database
         public IDbSet<Interest> Interests { get; set; }
         public IDbSet<Opinion> Opinions { get; set; }
         public IDbSet<Trip> Trips { get; set; }
-
     }
 }

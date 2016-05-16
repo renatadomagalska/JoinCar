@@ -1,0 +1,8 @@
+﻿@model IEnumerable<JoinCar.Database.Entities.Trip>
+@{
+    ViewBag.Title = "My Interests";
+}
+
+<h2>My interests</h2>
+
+@Html.Partial("_TripsTable", Model)

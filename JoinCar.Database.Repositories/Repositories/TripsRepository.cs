@@ -66,9 +66,9 @@ namespace JoinCar.Database.Repositories.Repositories
         {
             var trips = GetAllActiveTrips();
             if (!string.IsNullOrEmpty(searchStringFrom))
-                trips = trips.Where(t => t.From.Contains(searchStringFrom)).ToList();
+                trips = trips.Where(t => t.From.ToLower().Contains(searchStringFrom.ToLower())).ToList();
             if (!string.IsNullOrEmpty(searchStringTo))
-                trips = trips.Where(t => t.To.Contains(searchStringTo)).ToList();
+                trips = trips.Where(t => t.To.ToLower().Contains(searchStringTo.ToLower())).ToList();
             if (searchStartDate != null)
                 trips = trips.Where(t => t.DateTime >= searchStartDate.Value).ToList();
             if (searchEndDate != null)
@@ -89,6 +89,14 @@ namespace JoinCar.Database.Repositories.Repositories
             if (searchEndDate != null)
                 trips = trips.Where(t => t.DateTime >= searchEndDate.Value).ToList();
             return trips;
+        }
+
+        public ICollection<ApplicationUser> GetTripPassengers(int id)
+        {
+            return (from u in _context.Users
+                    join intr in _context.Interests on u.Id equals intr.UserId
+                    where intr.TripId == id
+                    select u).ToList();
         }
     }
 }

@@ -239,11 +239,16 @@
     <Content Include="Views\Trips\Delete.cshtml" />
     <Content Include="Views\Trips\Details.cshtml" />
     <Content Include="Views\Trips\Edit.cshtml" />
-    <Content Include="Views\Trips\Index.cshtml" />
     <Content Include="Views\Trips\ArchivedTripsList.cshtml" />
-    <Content Include="Views\Trips\UserTrips.cshtml" />
-    <Content Include="Views\Trips\UserInterests.cshtml" />
+    <Content Include="Views\Trips\MyTrips.cshtml" />
+    <Content Include="Views\Trips\MyInterests.cshtml" />
     <Content Include="Views\Trips\CreateOpinion.cshtml" />
+    <Content Include="Views\Trips\_TripsTable.cshtml" />
+    <Content Include="Views\Trips\Index.cshtml" />
+    <Content Include="Views\Trips\_SearchTrip.cshtml" />
+    <Content Include="Views\Trips\_OpinionsTable.cshtml" />
+    <Content Include="Views\Trips\_TripDetails.cshtml" />
+    <Content Include="Views\Trips\_PassengersList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

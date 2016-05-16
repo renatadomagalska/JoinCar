@@ -19,7 +19,6 @@ namespace JoinCar.Controllers
         private readonly ITripsRepository _tripsRepository = new TripsRepository();
         private readonly IOpinionsRepository _opinionsRepository = new OpinionsRepository();
         private readonly IInterestsRepository _interestsRepository = new InterestsRepository();
-        private readonly IApplicationUsersRepository _applicationUsersRepository = new ApplicationUsersRepository();
 
         // GET: Trips
         public ActionResult Index(string searchStringFrom, string searchStringTo, DateTime? searchStartDate,
@@ -51,7 +50,12 @@ namespace JoinCar.Controllers
             {
                 return HttpNotFound();
             }
-            return View(trip);
+            var objectsList = new List<object>
+            {
+                trip,
+                _tripsRepository.GetTripPassengers(id.Value)
+            };
+            return View(objectsList);
         }
 
         // GET: Trips/Create
@@ -142,7 +146,7 @@ namespace JoinCar.Controllers
         }
 
         [Authorize]
-        public ActionResult UserTrips()
+        public ActionResult MyTrips()
         {
             var userId = User.Identity.GetUserId();
             var objectsList = new List<object>
@@ -155,7 +159,7 @@ namespace JoinCar.Controllers
         }
 
         [Authorize]
-        public ActionResult UserInterests()
+        public ActionResult MyInterests()
         {
             return View(_interestsRepository.GetInterestsByUserId(User.Identity.GetUserId()).Select(i => i.Trip));
         }
@@ -163,7 +167,7 @@ namespace JoinCar.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UserInterests(int tripId)
+        public ActionResult MyInterests(int tripId)
         {
             var interest = new Interest(){
                 TripId = tripId,
@@ -172,7 +176,7 @@ namespace JoinCar.Controllers
             _interestsRepository.AddInterest(interest);
             _interestsRepository.Save();
 
-            return RedirectToAction("UserInterests");
+            return RedirectToAction("MyInterests");
         }
 
         [Authorize]

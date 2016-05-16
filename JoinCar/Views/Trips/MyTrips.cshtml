@@ -6,9 +6,16 @@
     List<Opinion> userIssuedOpinions = Model.ToList()[2] as List<Opinion>;
 }
 @{
-    ViewBag.Title = "UserTravels";
+    ViewBag.Title = "My Trips";
 }
 
-<h2>User trips</h2>
+<h2>My trips</h2>
+@Html.Partial("_TripsTable", userTripsList)
+
+<h2>Received opinions</h2>
+@Html.Partial("_OpinionsTable", userReceivedOpinions)
+
+<h2>Issued opinions</h2>
+@Html.Partial("_OpinionsTable", userIssuedOpinions)
 
 

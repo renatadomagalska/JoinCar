@@ -1,5 +1,10 @@
-﻿@using Microsoft.AspNet.Identity
-@model JoinCar.Database.Entities.Trip
+﻿@using JoinCar.Database.Entities
+@using Microsoft.AspNet.Identity
+@model IEnumerable<object>
+@{
+    Trip trip = Model.ToList()[0] as Trip;
+    List<ApplicationUser> passengers = Model.ToList()[1] as List<ApplicationUser>;
+}
 
 @{
     ViewBag.Title = "Details";
@@ -7,7 +12,7 @@
 
 <div id="fb-root"></div>
 <script>
-    (function(d, s, id) {
+    (function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
         js = d.createElement(s);
@@ -38,66 +43,66 @@
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-//        google.maps.event.addListener(map, 'click', function (event) {
-//            placeMarker(event.latLng);
-//        });
+        //        google.maps.event.addListener(map, 'click', function (event) {
+        //            placeMarker(event.latLng);
+        //        });
     }
 
-//    function change() {
-//        document.getElementById('googleMap').style.visibility = 'visible';
-//        var elem = document.getElementById("submit_road");
-//        if (elem.value == "Create Map") elem.value = "Create Road";
-//    }
-//    function createRoad() {
-//        change();
-//        directionsDisplay.setMap(map);
-//        document.getElementById('submit_road').addEventListener('click', function () {
-//            calculateAndDisplayRoute(directionsService, directionsDisplay);
-//        });
-//        var geocoder = new google.maps.Geocoder();
-//        geocodeAddress(geocoder, document.getElementById("From").value, "start");
-//        geocodeAddress(geocoder, document.getElementById("To").value, "end");
-//    }
-//    function geocodeAddress(geocoder, address, type) {
-//        geocoder.geocode({ 'address': address }, function (results, status) {
-//            if (status === google.maps.GeocoderStatus.OK) {
-//                map.setCenter(results[0].geometry.location);
-//                marker = new google.maps.Marker({
-//                    map: map,
-//                    position: results[0].geometry.location
-//                });
-//                if(type.localeCompare("start"))
-//                    start_geocoded = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-//                else
-//                    end_geocoded = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-//
-//            } else {
-//                alert('Geocode was not successful for the following reason: ' + status);
-//            }
-//
-//        });
-//    }
-//    function placeMarker(location) {
-//        new google.maps.Marker({position: location, map: map, });
-//        wayps.push({location: location,stopover: true});
-//    }
-//    function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-//        directionsService.route({
-//            origin: start_geocoded,
-//            destination: end_geocoded,
-//            waypoints: wayps,
-//            optimizeWaypoints: true,
-//            travelMode: google.maps.TravelMode.DRIVING
-//        }, function (response, status) {
-//            if (status === google.maps.DirectionsStatus.OK) {
-//                directionsDisplay.setDirections(response);
-//                var jsonValue = '{' +  "origin:"+ JSON.stringify(start_geocoded)+",destination:"+ JSON.stringify(end_geocoded)+ ",waypoints:"+ JSON.stringify(wayps) + '}'
-//                document.getElementById('JsonDirections').value = String(jsonValue);
-//            } else {
-//                window.alert('Directions request failed due to ' + status);
-//            }
-//        });
-//    }
+    //    function change() {
+    //        document.getElementById('googleMap').style.visibility = 'visible';
+    //        var elem = document.getElementById("submit_road");
+    //        if (elem.value == "Create Map") elem.value = "Create Road";
+    //    }
+    //    function createRoad() {
+    //        change();
+    //        directionsDisplay.setMap(map);
+    //        document.getElementById('submit_road').addEventListener('click', function () {
+    //            calculateAndDisplayRoute(directionsService, directionsDisplay);
+    //        });
+    //        var geocoder = new google.maps.Geocoder();
+    //        geocodeAddress(geocoder, document.getElementById("From").value, "start");
+    //        geocodeAddress(geocoder, document.getElementById("To").value, "end");
+    //    }
+    //    function geocodeAddress(geocoder, address, type) {
+    //        geocoder.geocode({ 'address': address }, function (results, status) {
+    //            if (status === google.maps.GeocoderStatus.OK) {
+    //                map.setCenter(results[0].geometry.location);
+    //                marker = new google.maps.Marker({
+    //                    map: map,
+    //                    position: results[0].geometry.location
+    //                });
+    //                if(type.localeCompare("start"))
+    //                    start_geocoded = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+    //                else
+    //                    end_geocoded = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+    //
+    //            } else {
+    //                alert('Geocode was not successful for the following reason: ' + status);
+    //            }
+    //
+    //        });
+    //    }
+    //    function placeMarker(location) {
+    //        new google.maps.Marker({position: location, map: map, });
+    //        wayps.push({location: location,stopover: true});
+    //    }
+    //    function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+    //        directionsService.route({
+    //            origin: start_geocoded,
+    //            destination: end_geocoded,
+    //            waypoints: wayps,
+    //            optimizeWaypoints: true,
+    //            travelMode: google.maps.TravelMode.DRIVING
+    //        }, function (response, status) {
+    //            if (status === google.maps.DirectionsStatus.OK) {
+    //                directionsDisplay.setDirections(response);
+    //                var jsonValue = '{' +  "origin:"+ JSON.stringify(start_geocoded)+",destination:"+ JSON.stringify(end_geocoded)+ ",waypoints:"+ JSON.stringify(wayps) + '}'
+    //                document.getElementById('JsonDirections').value = String(jsonValue);
+    //            } else {
+    //                window.alert('Directions request failed due to ' + status);
+    //            }
+    //        });
+    //    }
     google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
@@ -107,72 +112,35 @@
     <h4>Trip</h4>
     <hr/>
     <div id="googleMap" style="width: 500px; height: 380px;"></div>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.From)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.From)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.To)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.To)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DateTime)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DateTime)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AvailableSeats)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AvailableSeats)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        @Html.HiddenFor(model => model.Description)
-    </dl>
+    @Html.Partial("_TripDetails", trip)
 
     <h2>
         @{
 
-            if (User.Identity.GetUserId() != Model.UserId)
+            if (User.Identity.GetUserId() != trip?.UserId)
             {
-               // @Html.ActionLink("Join car", "UserInterests", new { tripId = Model.Id })
-                if (Model.DateTime < DateTime.Now)
+                // @Html.ActionLink("Join car", "UserInterests", new { tripId = Model.Id })
+                if (trip?.DateTime < DateTime.Now)
                 {
-                    @Html.ActionLink("Write opinion", "CreateOpinion", new { tripId = Model.Id })
+                    <br/>
+                    @Html.ActionLink("Write opinion", "CreateOpinion", new {tripId = trip.Id})
                 }
             }
         }
     </h2>
 </div>
-<div id="FL" class="fb-like" data-href="" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br/>
+
+@Html.Partial("_PassengersList", passengers)
+
+<div id="FL" class="fb-like" data-href="" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br />
 <div id="FC" class="fb-comments" data-href="" data-width="600" data-numposts="5"></div>
 
 
 @{
-    if (User.Identity.GetUserId() == Model.UserId)
+    if (User.Identity.GetUserId() == trip?.UserId)
     {
         <p>
-            @Html.ActionLink("Edit", "Edit", new {id = Model.Id}) |
+            @Html.ActionLink("Edit", "Edit", new { id = trip?.Id }) |
             @Html.ActionLink("Back to List", "Index")
         </p>
     }
@@ -183,4 +151,4 @@
         </p>
     }
 }
-            
+

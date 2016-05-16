@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,5 +25,6 @@ namespace JoinCar.Database.Repositories.Interfaces
         ICollection<Trip> GetArchivedFilteredTrips(string searchStringFrom, string searchStringTo,
             DateTime? searchStartDate, DateTime? searchEndDate);
 
+        ICollection<ApplicationUser> GetTripPassengers(int id);
     }
 }

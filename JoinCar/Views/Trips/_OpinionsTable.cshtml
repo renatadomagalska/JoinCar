@@ -1,0 +1,30 @@
+﻿@model IEnumerable<JoinCar.Database.Entities.Opinion>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Trip.From)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserIssuingOpinion.Nick)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Trip.From)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserIssuingOpinion.Nick)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+    </tr>
+}
+
+</table>
