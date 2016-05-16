@@ -1,7 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(JoinCar.Startup))]
+[assembly: OwinStartupAttribute(typeof (JoinCar.Startup))]
+
 namespace JoinCar
 {
     public partial class Startup
