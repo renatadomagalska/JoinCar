@@ -197,7 +197,12 @@ namespace JoinCar.Controllers
                 _opinionsRepository.Save();
             }
             var trip = _tripsRepository.GetTripById(opinion.TripId);
-            return View("Details", trip);
+            var objectsList = new List<object>
+            {
+                trip,
+                _tripsRepository.GetTripPassengers(trip.Id)
+            };
+            return View("Details", objectsList);
         }
     }
 }
