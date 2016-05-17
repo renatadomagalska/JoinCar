@@ -1,6 +1,9 @@
 ﻿@model JoinCar.Database.Entities.Trip
 
 <dl class="dl-horizontal">
+     <dt>
+        @Html.HiddenFor(model => model.JsonDirections)
+    </dt>
     <dt>
         @Html.DisplayNameFor(model => model.From)
     </dt>
