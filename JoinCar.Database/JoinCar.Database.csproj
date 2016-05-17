@@ -62,6 +62,18 @@
     <Compile Include="Entities\Interest.cs" />
     <Compile Include="Entities\Opinion.cs" />
     <Compile Include="Entities\Trip.cs" />
+    <Compile Include="Migrations\201605071744095_InitialCreate.cs" />
+    <Compile Include="Migrations\201605071744095_InitialCreate.Designer.cs">
+      <DependentUpon>201605071744095_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605071749092_ApplicationDBStructutre_part1.cs" />
+    <Compile Include="Migrations\201605071749092_ApplicationDBStructutre_part1.Designer.cs">
+      <DependentUpon>201605071749092_ApplicationDBStructutre_part1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605071800089_ApplicationDBStructutre_part1Edit.cs" />
+    <Compile Include="Migrations\201605071800089_ApplicationDBStructutre_part1Edit.Designer.cs">
+      <DependentUpon>201605071800089_ApplicationDBStructutre_part1Edit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201605131947218_AppDB2.cs" />
     <Compile Include="Migrations\201605131947218_AppDB2.Designer.cs">
       <DependentUpon>201605131947218_AppDB2.cs</DependentUpon>
@@ -89,6 +101,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\201605071744095_InitialCreate.resx">
+      <DependentUpon>201605071744095_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071749092_ApplicationDBStructutre_part1.resx">
+      <DependentUpon>201605071749092_ApplicationDBStructutre_part1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071800089_ApplicationDBStructutre_part1Edit.resx">
+      <DependentUpon>201605071800089_ApplicationDBStructutre_part1Edit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605131947218_AppDB2.resx">
       <DependentUpon>201605131947218_AppDB2.cs</DependentUpon>
     </EmbeddedResource>
