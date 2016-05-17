@@ -1,0 +1,57 @@
+﻿@model JoinCar.Database.Entities.Trip
+
+
+<script src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDO1JcTRY5TngKBh8MvyuWdC4v1_zzizQ4"></script>
+<script>
+
+    var map;
+    var wayps = [];
+    var geocoder;
+    var start_geocoded;
+    var end_geocoded;
+    var directionsService;
+    var directionsDisplay;
+
+    function initialize() {
+        directionsService = new google.maps.DirectionsService;
+        directionsDisplay = new google.maps.DirectionsRenderer;
+        var mapProp = {
+            center: { lat: 52.397, lng: 19.644 },
+            zoom: 5,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        var stringJson = document.getElementById('JsonDirections').value;
+        var json = JSON.parse(stringJson);
+        directionsDisplay.setMap(map);
+        calculateAndDisplayRoute(directionsService, directionsDisplay, json);
+    }
+
+    function placeMarker(location) {
+        new google.maps.Marker({ position: location, map: map, });
+        wayps.push({ location: location, stopover: true });
+    }
+
+    function calculateAndDisplayRoute(directionsService, directionsDisplay, json) {
+        directionsService.route({
+                origin: new google.maps.LatLng(json.origin.lat, json.origin.lng),
+                destination: new google.maps.LatLng(json.destination.lat, json.destination.lng),
+                waypoints: json.waypoints,
+                optimizeWaypoints: true,
+                travelMode: google.maps.TravelMode.DRIVING
+            },
+            function(response, status) {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+    <dt>
+        @Html.HiddenFor(model => model.JsonDirections)
+    </dt>
+    <div id="googleMap" style="width: 500px; height: 380px;"></div>
