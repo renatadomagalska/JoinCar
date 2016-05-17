@@ -45,7 +45,7 @@
             {
                 if (trip?.AvailableSeats > 0 && userInterests != null && userInterests.All(i => i.TripId != trip.Id))
                 {
-                    <form action="" method="post">
+                    <form action="" method="post" style="text-align: center;">
                         @Html.AntiForgeryToken()
                         <input type="submit" value="JoinCar" name="action:JoinCar" class="btn btn-default"/>
                     </form>
