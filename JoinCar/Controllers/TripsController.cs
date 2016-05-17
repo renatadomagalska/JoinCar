@@ -18,9 +18,24 @@ namespace JoinCar.Controllers
 {
     public class TripsController : Controller
     {
-        private readonly ITripsRepository _tripsRepository = new TripsRepository();
-        private readonly IOpinionsRepository _opinionsRepository = new OpinionsRepository();
-        private readonly IInterestsRepository _interestsRepository = new InterestsRepository();
+        private readonly ITripsRepository _tripsRepository;
+        private readonly IOpinionsRepository _opinionsRepository;
+        private readonly IInterestsRepository _interestsRepository;
+
+        public TripsController()
+        {
+            _tripsRepository = new TripsRepository();
+            _opinionsRepository = new OpinionsRepository();
+            _interestsRepository = new InterestsRepository();
+        }
+
+        public TripsController(ITripsRepository tripsRepository, IOpinionsRepository opinionsRepository,
+            IInterestsRepository interestsRepository)
+        {
+            _tripsRepository = tripsRepository;
+            _opinionsRepository = opinionsRepository;
+            _interestsRepository = interestsRepository;
+        }
 
         // GET: Trips
         public ActionResult Index(string searchStringFrom, string searchStringTo, DateTime? searchStartDate,
@@ -141,9 +156,13 @@ namespace JoinCar.Controllers
         [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int? id)
         {
-            _tripsRepository.DeleteTrip(id);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            _tripsRepository.DeleteTrip(id.Value);
             _tripsRepository.Save();
             return RedirectToAction("Index");
         }
@@ -171,19 +190,23 @@ namespace JoinCar.Controllers
         [HttpPost]
         [MultipleButton(Name = "action", Argument = "JoinCar")]
         [ValidateAntiForgeryToken]
-        public ActionResult JoinCar(int id)
+        public ActionResult JoinCar(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             using (var scope = new TransactionScope())
             {
                 var interest = new Interest()
                 {
-                    TripId = id,
+                    TripId = id.Value,
                     UserId = User.Identity.GetUserId()
                 };
                 _interestsRepository.AddInterest(interest);
                 _interestsRepository.Save();
 
-                _tripsRepository.DecrementAvailableSeats(id);
+                _tripsRepository.DecrementAvailableSeats(id.Value);
                 _tripsRepository.Save();
 
                 scope.Complete();
@@ -196,15 +219,19 @@ namespace JoinCar.Controllers
         [HttpPost]
         [MultipleButton(Name = "action", Argument = "LeaveCar")]
         [ValidateAntiForgeryToken]
-        public ActionResult LeaveCar(int id)
+        public ActionResult LeaveCar(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             using (var scope = new TransactionScope())
             {
-                var interest = _interestsRepository.GetInterestByTripAndUserIds(id, User.Identity.GetUserId());
+                var interest = _interestsRepository.GetInterestByTripAndUserIds(id.Value, User.Identity.GetUserId());
                 _interestsRepository.DeleteInterest(interest.Id);
                 _interestsRepository.Save();
 
-                _tripsRepository.IncrementAvailableSeats(id);
+                _tripsRepository.IncrementAvailableSeats(id.Value);
                 _tripsRepository.Save();
 
                 scope.Complete();
@@ -214,8 +241,12 @@ namespace JoinCar.Controllers
         }
 
         [Authorize]
-        public ActionResult CreateOpinion(int tripId)
+        public ActionResult CreateOpinion(int? tripId)
         {
+            if (tripId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             return View();
         }
 
