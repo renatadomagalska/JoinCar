@@ -1,8 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Net;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using JoinCar.Controllers;
 using JoinCar.Database.Entities;
 using JoinCar.Database.Repositories.Interfaces;
@@ -41,7 +37,7 @@ namespace JoinCar.Tests.Controllers
             var mockTripsRepo = new Mock<ITripsRepository>();
             var mockIntrestsRepo = new Mock<IInterestsRepository>();
             TripsController controller = new TripsController(mockTripsRepo.Object, null, mockIntrestsRepo.Object);
-            var result = controller.Details(9) as ViewResult;
+            var result = controller.Details(1) as ViewResult;
             Assert.IsNull(result);
         }
 
@@ -69,6 +65,13 @@ namespace JoinCar.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(HttpStatusCodeResult));
         }
 
+
+        [TestMethod]
+        public void Create()
+        {
+
+        }
+
         [TestMethod]
         public void Create_validModel()
         {
@@ -78,7 +81,13 @@ namespace JoinCar.Tests.Controllers
         [TestMethod]
         public void Create_invalidModel()
         {
+            var mockTripRepo = new Mock<ITripsRepository>();
+            var controller = new TripsController(mockTripRepo.Object, null, null);
+            controller.ModelState.AddModelError("From", "Required");
+            var newTrip = new Trip();
 
+            var result = controller.Create(newTrip) as ViewResult;
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
 
         [TestMethod]
