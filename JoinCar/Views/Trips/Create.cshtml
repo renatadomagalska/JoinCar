@@ -151,8 +151,15 @@
         }, function (response, status) {
             if (status === google.maps.DirectionsStatus.OK) {
                 directionsDisplay.setDirections(response);
-                var jsonValue = '{' +  "origin:"+ JSON.stringify(start_geocoded)+",destination:"+ JSON.stringify(end_geocoded)+ ",waypoints:"+ JSON.stringify(wayps) + '}'
-                document.getElementById('JsonDirections').value = String(jsonValue);
+                var jsonValue = '{' +
+                    "\"origin\":" +
+                    JSON.stringify(start_geocoded) +
+                    ",\"destination\":" +
+                    JSON.stringify(end_geocoded) +
+                    ",\"waypoints\":" +
+                    JSON.stringify(wayps) +
+                    '}';
+                document.getElementById('JsonDirections').value =jsonValue;
             } else {
                 window.alert('Directions request failed due to ' + status);
             }
