@@ -30,7 +30,11 @@
 <div>
     <h4>Trip</h4>
     <hr />
+<div style="display: inline-block; float: right;">
+    <div id="googleMap" style="width: 500px; height: 380px;"></div>
+</div>
 
+    <div style="display: inline-block; float: left;">
     @Html.Partial("_MapView", trip)
     @Html.Partial("_TripDetails", trip)
 
@@ -63,7 +67,7 @@
         }
     }
 </div>
-
+<div style="clear: both;"></div>
 <h2>Passengers</h2>
 @Html.Partial("_PassengersList", passengers)
 
