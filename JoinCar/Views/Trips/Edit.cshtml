@@ -1,9 +1,12 @@
 ﻿@model JoinCar.Database.Entities.Trip
+@using JoinCar.Database.Entities
 
 @{
     ViewBag.Title = "Edit";
 }
-
+@{
+    Trip trip = Model as Trip;
+}
 <h2>Edit</h2>
 
 
@@ -13,10 +16,13 @@
     
     <div class="form-horizontal">
         <h4>Trip</h4>
-        <hr />
+        <hr/>
+
+
+        @Html.Partial("_MapView", trip)
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
-
+        @Html.HiddenFor(model => model.JsonDirections)
         <div class="form-group">
             @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
