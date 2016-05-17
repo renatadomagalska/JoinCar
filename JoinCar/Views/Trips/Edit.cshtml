@@ -65,7 +65,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="button" id="submit_road" value="Change Map" onclick="createRoad()" class="btn btn-default">
+                <input type="submit" value="Save" class="btn btn-default"/>
             </div>
         </div>
     </div>
@@ -78,3 +79,93 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script>
+
+    var map;
+    var wayps = [];
+    var geocoder;
+    var start_geocoded;
+    var end_geocoded;
+    var directionsService;
+    var directionsDisplay;
+    function initialize() {
+        directionsService = new google.maps.DirectionsService;
+        directionsDisplay = new google.maps.DirectionsRenderer;
+        var mapProp = {
+            zoom:5,
+            mapTypeId:google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        var stringJson = document.getElementById('JsonDirections').value;
+        var json = JSON.parse(stringJson);
+        directionsDisplay.setMap(map);
+        start_geocoded = new google.maps.LatLng(json.origin.lat, json.origin.lng);
+        end_geocoded = new google.maps.LatLng(json.destination.lat, json.destination.lng);
+        wayps = json.waypoints;
+       displayRoute(directionsService, directionsDisplay, json);
+        google.maps.event.addListener(map, 'click', function (event) {
+            placeMarker(event.latLng);
+        });
+    }
+    function displayRoute(directionsService, directionsDisplay, json) {
+        directionsService.route({
+            origin:start_geocoded,
+            destination: end_geocoded ,
+            waypoints: wayps ,
+            optimizeWaypoints: true,
+            travelMode: google.maps.TravelMode.DRIVING
+        },
+            function (response, status) {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                    var jsonValue = '{' +
+                    "\"origin\":" +
+                    JSON.stringify(start_geocoded) +
+                    ",\"destination\":" +
+                    JSON.stringify(end_geocoded) +
+                    ",\"waypoints\":" +
+                    JSON.stringify(wayps) +
+                    '}';
+                    document.getElementById('JsonDirections').value = jsonValue;
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+    }
+
+
+    function createRoad() {
+        directionsDisplay.setMap(map);
+        document.getElementById('submit_road').addEventListener('click', function () {
+           displayRoute(directionsService, directionsDisplay);
+        });
+        var geocoder = new google.maps.Geocoder();
+        geocodeAddress(geocoder, document.getElementById("From").value, "start");
+        geocodeAddress(geocoder, document.getElementById("To").value, "end");
+    }
+    function geocodeAddress(geocoder, address, type) {
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+                if(type.localeCompare("start"))
+                    start_geocoded = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+                else
+                    end_geocoded = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+
+        });
+    }
+    function placeMarker(location) {
+        new google.maps.Marker({position: location, map: map, });
+        wayps.push({location: location,stopover: true});
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
