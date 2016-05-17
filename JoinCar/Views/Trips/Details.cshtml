@@ -4,6 +4,7 @@
 @{
     Trip trip = Model.ToList()[0] as Trip;
     List<ApplicationUser> passengers = Model.ToList()[1] as List<ApplicationUser>;
+    List<Interest> userInterests = Model.ToList()[2] as List<Interest>;
 }
 
 @{
@@ -115,29 +116,36 @@
     @Html.Partial("_TripDetails", trip)
 
     @{
-        if (User.Identity.GetUserId() == trip?.UserId)
+        if (User.Identity.GetUserId() != trip?.UserId)
         {
-            if (trip?.AvailableSeats > 0)
+            if (trip?.DateTime > DateTime.Now)
             {
-                using (Html.BeginForm())
+                if (trip?.AvailableSeats > 0 && userInterests != null && userInterests.All(i => i.TripId != trip.Id))
                 {
-                    @Html.AntiForgeryToken()
-                    <div>
-                        @Html.HiddenFor(model => trip.Id)
-                        <h2><input type="submit" value="JoinCar" class="btn btn-default" /></h2>
-                    </div>
+                    <form action="" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="submit" value="JoinCar" name="action:JoinCar" class="btn btn-default"/>
+                    </form>
+                }
+
+                if (userInterests != null && userInterests.Any(interest => interest.TripId == trip?.Id))
+                {
+                    <form action="" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="submit" value="LeaveCar" name="action:LeaveCar" class="btn btn-default"/>
+                    </form>
                 }
             }
-
-            if (trip?.DateTime < DateTime.Now)
+            else if (userInterests != null && userInterests.Any(interest => interest.TripId == trip?.Id))
             {
                 <br />
-                <h2>Html.ActionLink("Write opinion", "CreateOpinion", new { tripId = trip.Id })</h2>
+                <h2>@Html.ActionLink("Write opinion", "CreateOpinion", new { tripId = trip?.Id })</h2>
             }
         }
     }
 </div>
 
+<h2>Passengers</h2>
 @Html.Partial("_PassengersList", passengers)
 
 <div id="FL" class="fb-like" data-href="" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br />

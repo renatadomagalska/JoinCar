@@ -10,12 +10,48 @@
 }
 
 <h2>My trips</h2>
-@Html.Partial("_TripsTable", userTripsList)
+@{
+    if (!userTripsList.Any())
+    {
+        <h4>
+            You haven't created any trip yet.
+            @Html.ActionLink("Create!", "Create")
+        </h4>
+    }
+    else
+    {
+        @Html.Partial("_TripsTable",userTripsList)
+    }
+}
 
 <h2>Received opinions</h2>
-@Html.Partial("_OpinionsTable", userReceivedOpinions)
+@{
+    if (!userReceivedOpinions.Any())
+    {
+        <h4>
+            You haven't received any opinions yet.
+        </h4>
+    }
+    else
+    {
+        @Html.Partial("_OpinionsTable", userReceivedOpinions)
+    }
+}
+
 
 <h2>Issued opinions</h2>
-@Html.Partial("_OpinionsTable", userIssuedOpinions)
+@{
+    if (!userIssuedOpinions.Any())
+    {
+        <h4>
+            You haven't issued any opinions yet.
+        </h4>
+    }
+    else
+    {
+        @Html.Partial("_OpinionsTable", userIssuedOpinions)
+    }
+}
+
 
 

@@ -47,14 +47,6 @@
                         @Html.ActionLink("Details", "Details", new { id = item.Id })
                     </td>
                 }
-                else if (@HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString() == "MyInterests")
-                {
-                    using (Html.BeginForm())
-                    {
-                        @Html.AntiForgeryToken()
-                        @Html.ActionLink("Leave car", "MyInterests", new { tripId = item.Id })
-                    }
-                }
                 else
                 {
                     if (User.Identity.GetUserId() == item.User.Id)

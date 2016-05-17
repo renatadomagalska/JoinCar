@@ -11,6 +11,7 @@ using JoinCar.Database;
 using JoinCar.Database.Entities;
 using JoinCar.Database.Repositories.Interfaces;
 using JoinCar.Database.Repositories.Repositories;
+using JoinCar.Helpers;
 using Microsoft.AspNet.Identity;
 
 namespace JoinCar.Controllers
@@ -54,7 +55,8 @@ namespace JoinCar.Controllers
             var objectsList = new List<object>
             {
                 trip,
-                _tripsRepository.GetTripPassengers(id.Value)
+                _tripsRepository.GetTripPassengers(id.Value),
+                _interestsRepository.GetInterestsByUserId(User.Identity.GetUserId())
             };
             return View(objectsList);
         }
@@ -167,31 +169,9 @@ namespace JoinCar.Controllers
 
         [Authorize]
         [HttpPost]
+        [MultipleButton(Name = "action", Argument = "JoinCar")]
         [ValidateAntiForgeryToken]
-        public ActionResult MyInterests(int tripId)
-        {
-            using (var scope = new TransactionScope())
-            {
-                var interest = _interestsRepository.GetInterestByTripAndUserIds(tripId, User.Identity.GetUserId());
-                if (interest == null)
-                {
-                    return HttpNotFound();
-                }
-                _interestsRepository.DeleteInterest(interest.Id);
-                _interestsRepository.Save();
-                _tripsRepository.IncrementAvailableSeats(tripId);
-                _tripsRepository.Save();
-
-                scope.Complete();
-            }
-
-            return RedirectToAction("MyInterests");
-        }
-
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Details(int id)
+        public ActionResult JoinCar(int id)
         {
             using (var scope = new TransactionScope())
             {
@@ -204,6 +184,27 @@ namespace JoinCar.Controllers
                 _interestsRepository.Save();
 
                 _tripsRepository.DecrementAvailableSeats(id);
+                _tripsRepository.Save();
+
+                scope.Complete();
+            }
+
+            return RedirectToAction("MyInterests");
+        }
+
+        [Authorize]
+        [HttpPost]
+        [MultipleButton(Name = "action", Argument = "LeaveCar")]
+        [ValidateAntiForgeryToken]
+        public ActionResult LeaveCar(int id)
+        {
+            using (var scope = new TransactionScope())
+            {
+                var interest = _interestsRepository.GetInterestByTripAndUserIds(id, User.Identity.GetUserId());
+                _interestsRepository.DeleteInterest(interest.Id);
+                _interestsRepository.Save();
+
+                _tripsRepository.IncrementAvailableSeats(id);
                 _tripsRepository.Save();
 
                 scope.Complete();
@@ -233,7 +234,8 @@ namespace JoinCar.Controllers
             var objectsList = new List<object>
             {
                 trip,
-                _tripsRepository.GetTripPassengers(trip.Id)
+                _tripsRepository.GetTripPassengers(trip.Id),
+                _interestsRepository.GetInterestsByUserId(User.Identity.GetUserId())
             };
             return View("Details", objectsList);
         }

@@ -479,7 +479,7 @@ namespace JoinCar.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Trips");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

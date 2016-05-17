@@ -5,4 +5,16 @@
 
 <h2>My interests</h2>
 
-@Html.Partial("_TripsTable", Model)
+@{
+    if (!Model.Any())
+    {
+        <h4>
+            You haven't joined any car yet.
+            @Html.ActionLink("Join!", "Index")
+        </h4>
+    }
+    else
+    {
+        @Html.Partial("_TripsTable", Model)
+    }
+}
