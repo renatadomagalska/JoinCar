@@ -7,13 +7,13 @@ namespace JoinCar.Database.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.0-30225")]
-    public sealed partial class AppDB2 : IMigrationMetadata
+    public sealed partial class dbInit : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AppDB2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(dbInit));
         
         string IMigrationMetadata.Id
         {
-            get { return "201605131947218_AppDB2"; }
+            get { return "201605180001251_dbInit"; }
         }
         
         string IMigrationMetadata.Source
